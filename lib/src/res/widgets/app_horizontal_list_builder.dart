@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HorizontalListBuilder extends StatelessWidget {
+class AppHorizontalListBuilder extends StatelessWidget {
   final IndexedWidgetBuilder itemBuilder;
   final int itemCount;
   final double? heightList;
 
-  const HorizontalListBuilder({
+  const AppHorizontalListBuilder({
     Key? key,
     required this.itemBuilder,
     required this.itemCount,

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nasser_core_package/example/models.dart';
@@ -14,6 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   nasserCorePackageConfigureDependencies();
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
   BaseRequestDefaults.instance.setBaseUrl('https://sisdev2.midocean.ae/api/');
   BaseRequestDefaults.instance.setToken('41700|KVAsb6nTjtDOGSjWzsBgz3OiI7Lv4KWugsILEcfc');
 

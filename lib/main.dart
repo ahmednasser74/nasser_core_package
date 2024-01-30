@@ -66,7 +66,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // final AppCache _cache = getIt<AppCache>();
-  final ExampleRepository exampleRepo = getIt<ExampleRepository>();
+  final ExampleRepository exampleRepo = packageGetIt<ExampleRepository>();
   AppDropdownController<LoginResponseModel> dropDownController = AppDropdownController<LoginResponseModel>();
 
   void _incrementCounter() async {
@@ -89,8 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _buildReceiverCompany(),
             12.heightBox,
             AppButton(
-              onPressed: () => context.languageIsAr ? context.updateLanguage(Language.en) : context.updateLanguage(Language.ar),
-              title: 'update language',
+              onTap: () => context.languageIsAr ? context.updateLanguage(Language.en) : context.updateLanguage(Language.ar),
+              text: 'update language',
             ),
             12.heightBox,
             AppTextFieldWidget(
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             12.heightBox,
             AppButton(
-              onPressed: () {
+              onTap: () {
                 // final login = LoginResponseModel(id: 1, item: 'a', total: 2);
                 // _cache.set('data', login.toJson());
                 // final x = await _cache.getObjectFromJson<LoginResponseModel>(
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //   key: 'data',
                 // );
               },
-              title: 'cache object',
+              text: 'cache object',
             ),
             12.heightBox,
             Text('name'.translate, style: TextStyle(fontSize: 18.sp)),

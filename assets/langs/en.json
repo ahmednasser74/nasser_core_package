@@ -43,6 +43,8 @@
   "requestType": "Request Type",
   "enterSentCodeOnYourEmail": "Enter Sent Code On Your Email",
   "pleaseAllowCameraPermission": "Please Allow Camera Permission",
+  "ok": "OK",
+  "cancel": "Cancel",
 
   "":""
 }

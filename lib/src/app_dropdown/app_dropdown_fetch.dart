@@ -62,7 +62,7 @@ class AppDropDownFetch<T extends AppDropdownBaseModel<T>> extends StatefulWidget
 }
 
 class AppDropDownFetchState<T extends AppDropdownBaseModel<T>> extends State<AppDropDownFetch<T>> {
-  final AppDropdownBloc _appDropdownBloc = getIt<AppDropdownBloc>();
+  final AppDropdownBloc _appDropdownBloc = packageGetIt<AppDropdownBloc>();
   List<T>? list;
   final ScrollController scrollController = ScrollController();
   final List<MultiSelectItem<T>> multiSelectItems = [];

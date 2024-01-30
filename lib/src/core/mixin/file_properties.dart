@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nasser_core_package/nasser_core_package.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:permission_handler/permission_handler.dart';
 
 mixin FileProperties {
   Future<File?> pickedFile() async {
@@ -61,6 +62,11 @@ mixin FileProperties {
 
   Future<({File file, String path})?> pickedImage({required ImageSource source}) async {
     try {
+      PermissionStatus imagePermission = source == ImageSource.camera ? await Permission.camera.request() : await Permission.storage.request();
+      if (imagePermission.isDenied || (Platform.isAndroid && imagePermission.isPermanentlyDenied)) {
+        throw Exception('pleaseAllowCameraPermission'.translate);
+      }
+
       final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 50);
       if (pickedFile == null) return null;
 

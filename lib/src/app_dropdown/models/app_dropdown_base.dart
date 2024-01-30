@@ -39,7 +39,7 @@ class AppDropdownItem extends AppDropdownBaseModel<AppDropdownItem> {
   String get textDisplay => text;
 
   @override
-  List<Object> get props => <Object>[text, value!];
+  List<Object> get props => <Object>[text, value ?? ''];
 
   @override
   AppDropdownItem fromJson(Map<String, dynamic> json) {

@@ -6,7 +6,8 @@ class AppTextFieldWidget extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? inputType;
   final String? hint;
-  final bool obscureText;
+  final bool secureText;
+  final Color? secureIconColor;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? Function(String? v)? validator;
@@ -24,7 +25,10 @@ class AppTextFieldWidget extends StatefulWidget {
   final double? height;
   final FocusNode? focusNode;
   final bool autoFocus;
+  final bool? filled;
   final EdgeInsets? padding;
+  final Color? fillColor;
+  final double? labelFontSize;
 
   const AppTextFieldWidget({
     Key? key,
@@ -32,7 +36,7 @@ class AppTextFieldWidget extends StatefulWidget {
     this.inputType,
     this.prefixIcon,
     this.hint,
-    this.obscureText = false,
+    this.secureText = false,
     this.readOnly = false,
     this.acceptArabicCharOnly = false,
     this.acceptNumbersOnly = false,
@@ -50,6 +54,10 @@ class AppTextFieldWidget extends StatefulWidget {
     this.focusNode,
     this.padding,
     this.autoFocus = false,
+    this.filled,
+    this.fillColor,
+    this.secureIconColor,
+    this.labelFontSize,
   }) : super(key: key);
 
   @override
@@ -62,11 +70,12 @@ class _AppTextFieldWidgetState extends State<AppTextFieldWidget> {
   @override
   void initState() {
     super.initState();
-    passwordVisibility = widget.obscureText;
+    passwordVisibility = widget.secureText;
   }
 
   @override
   Widget build(BuildContext context) {
+    final InputDecorationTheme inputDecorationTheme = Theme.of(context).inputDecorationTheme;
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         height: widget.height,
@@ -92,34 +101,38 @@ class _AppTextFieldWidgetState extends State<AppTextFieldWidget> {
             if (widget.acceptNumbersOnly) FilteringTextInputFormatter.digitsOnly,
           ],
           decoration: InputDecoration(
-            fillColor: Colors.grey.shade200,
-            focusColor: Colors.grey.shade200,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.blue),
-            ),
-            // focusedBorder: InputBorder.none,
-            // enabledBorder: InputBorder.none,
-            // errorBorder: InputBorder.none,
-            // disabledBorder: InputBorder.none,
-            filled: true,
-            hintText: widget.hint,
             labelText: widget.labelText,
+            labelStyle: TextStyle(fontSize: widget.labelFontSize),
+            hintText: widget.hint,
+            border: inputDecorationTheme.border,
+            focusedBorder: inputDecorationTheme.focusedBorder,
+            enabledBorder: inputDecorationTheme.enabledBorder,
+            errorBorder: inputDecorationTheme.errorBorder,
+            disabledBorder: inputDecorationTheme.disabledBorder,
+            filled: widget.filled == null ? inputDecorationTheme.filled : widget.filled,
+            fillColor: widget.fillColor ?? inputDecorationTheme.fillColor,
+            contentPadding: inputDecorationTheme.contentPadding,
             errorMaxLines: 2,
+            focusColor: inputDecorationTheme.focusColor,
             prefixIcon: widget.prefixIcon,
-            suffixIcon: widget.obscureText
-                ? IconButton(
-                    icon: Icon(
-                      passwordVisibility ? Icons.visibility_off : Icons.visibility,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => setState(() => passwordVisibility = !passwordVisibility),
-                  )
-                : widget.suffixIcon,
+            suffixIcon: suffixIcon(setState),
           ),
         ),
       );
     });
+  }
+
+  Widget? suffixIcon(setState) {
+    if (widget.secureText) {
+      return IconButton(
+        icon: Icon(
+          passwordVisibility ? Icons.visibility_off : Icons.visibility,
+          color: widget.secureIconColor ?? Theme.of(context).primaryColor,
+        ),
+        onPressed: () => setState(() => passwordVisibility = !passwordVisibility),
+      );
+    }
+    return widget.suffixIcon;
   }
 
   @override

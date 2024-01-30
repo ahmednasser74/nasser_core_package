@@ -6,25 +6,32 @@ class AppRichText extends StatelessWidget {
     required this.title,
     required this.value,
     this.fontSize = 14.0,
-    this.keyFontSize = 14.0,
-    this.valueFontSize = 14.0,
+    this.titleFontSize,
+    this.valueFontSize,
     this.titleColor,
-    this.valueColor = Colors.black,
+    this.valueColor,
+    this.titleFontFamily,
+    this.valueDecoration,
+    this.weight,
   }) : super(key: key);
-  final String title;
-  final String value;
-  final double? fontSize, keyFontSize, valueFontSize;
+  final String title, value;
+  final double? fontSize, titleFontSize, valueFontSize;
   final Color? titleColor, valueColor;
+  final String? titleFontFamily;
+  final TextDecoration? valueDecoration;
+  final FontWeight? weight;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return RichText(
       text: TextSpan(
         text: title,
         style: TextStyle(
           color: titleColor ?? Theme.of(context).primaryColor,
-          fontFamily: 'din',
-          fontSize: keyFontSize ?? fontSize,
+          fontFamily: theme.textTheme.bodyMedium?.fontFamily ?? titleFontFamily,
+          fontSize: titleFontSize ?? fontSize,
+          fontWeight: weight,
         ),
         children: [
           TextSpan(
@@ -32,8 +39,10 @@ class AppRichText extends StatelessWidget {
             style: TextStyle(
               color: valueColor,
               fontSize: valueFontSize ?? fontSize,
-              fontFamily: 'din',
+              fontFamily: theme.textTheme.bodyMedium?.fontFamily ?? titleFontFamily,
               overflow: TextOverflow.ellipsis,
+              decoration: valueDecoration,
+              fontWeight: weight,
             ),
           ),
         ],

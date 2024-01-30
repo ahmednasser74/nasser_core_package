@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String? title, fontFamily;
+  final VoidCallback onTap;
+  final String? text, fontFamily;
   final Alignment alignment;
-  final double elevation, fonSize, paddingHorizontal, paddingVertical, marginHorizontal, marginVertical;
-  final double? borderRadius;
+  final double elevation, paddingHorizontal, paddingVertical, marginHorizontal, marginVertical;
+  final double? borderRadius, fonSize;
   final FontWeight? fontWeight;
   final Widget? child;
-  final Color textColor;
+  final Color? textColor;
   final Color? borderColor;
   final Color? backgroundColor;
   final Size? minimumSize;
   final TextAlign? textAlign;
   const AppButton({
     Key? key,
-    required this.onPressed,
-    this.title,
+    required this.onTap,
+    this.text,
     this.alignment = Alignment.center,
     this.backgroundColor,
     this.elevation = 0,
     this.child,
-    this.paddingHorizontal = 20,
-    this.paddingVertical = 10,
+    this.paddingHorizontal = 16,
+    this.paddingVertical = 8,
     this.marginHorizontal = 0,
     this.marginVertical = 0,
-    this.textColor = Colors.white,
-    this.fonSize = 20,
-    this.fontFamily = 'din',
+    this.textColor,
+    this.fonSize,
+    this.fontFamily,
     this.borderColor,
     this.borderRadius,
     this.fontWeight,
@@ -38,13 +38,14 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonTextStyle = Theme.of(context).textButtonTheme.style?.textStyle?.resolve({MaterialState.selected});
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: marginHorizontal,
         vertical: marginVertical,
       ),
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: onTap,
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.symmetric(
             horizontal: paddingHorizontal,
@@ -55,18 +56,19 @@ class AppButton extends StatelessWidget {
           backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
           elevation: elevation,
           alignment: alignment,
+          // textStyle: buttonTextStyle,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 10.r)),
           ),
         ),
         child: child ??
             Text(
-              title ?? '',
+              text ?? '',
               style: TextStyle(
-                fontSize: fonSize,
-                color: textColor,
-                fontFamily: fontFamily,
-                fontWeight: fontWeight,
+                fontSize: fonSize ?? buttonTextStyle?.fontSize,
+                color: textColor ?? buttonTextStyle?.color ?? Colors.black,
+                fontFamily: fontFamily ?? buttonTextStyle?.fontFamily,
+                fontWeight: fontWeight ?? buttonTextStyle?.fontWeight,
                 height: 1.2,
               ),
               textAlign: textAlign,

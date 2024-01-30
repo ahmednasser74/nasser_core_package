@@ -144,7 +144,7 @@ class _AppDropdownState<T extends AppDropdownBaseModel<T>> extends State<AppDrop
           validator: widget.validator,
           controller: dropDownFieldController,
           suffixIcon: buildISuffixIcon(),
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          // padding: EdgeInsets.symmetric(horizontal: 12.w),
         ),
         if (widget.list == null || widget.list!.isEmpty) Text('${widget.labelText} list is empty', style: TextStyle(color: Colors.red, fontSize: 10.sp)),
       ],
@@ -172,11 +172,14 @@ class _AppDropdownState<T extends AppDropdownBaseModel<T>> extends State<AppDrop
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return Padding(
+        return AppContainer(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          margin: EdgeInsets.all(18.sp),
+          borderRadius: 12.r,
           child: BlocProvider<AppDropdownBloc>.value(
-            value: widget.appDropdownBloc ?? getIt<AppDropdownBloc>(),
+            value: widget.appDropdownBloc ?? packageGetIt<AppDropdownBloc>(),
             child: BlocConsumer<AppDropdownBloc, AppDropdownState>(
               listener: (BuildContext context, AppDropdownState state) {
                 WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {

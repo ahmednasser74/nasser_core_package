@@ -6,14 +6,14 @@ class AppCheckboxWithTextWidget extends StatefulWidget {
     Key? key,
     required this.value,
     required this.onChanged,
-    required this.title,
+    this.title,
     this.onTapText,
   }) : super(key: key);
 
   final Function(bool) onChanged;
-  bool value;
-  final String title;
   final VoidCallback? onTapText;
+  bool value;
+  final String? title;
 
   @override
   State<AppCheckboxWithTextWidget> createState() => _AppCheckboxWithTextWidgetState();
@@ -24,19 +24,24 @@ class _AppCheckboxWithTextWidgetState extends State<AppCheckboxWithTextWidget> {
   Widget build(BuildContext context) {
     // this for removing changeable status onTap from text in case need to tap on text
     if (widget.onTapText == null) {
-      return InkWell(
-        onTap: () {
-          widget.value = !widget.value;
-          widget.onChanged(widget.value);
-          setState(() {});
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return InkWell(
+            onTap: () {
+              widget.value = !widget.value;
+              widget.onChanged(widget.value);
+              setState(() {});
+            },
+            child: _checkBox(),
+          );
         },
-        child: _checkBox(),
       );
     }
     return _checkBox();
   }
 
   Widget _checkBox() {
+    final checkboxTheme = Theme.of(context).checkboxTheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -44,7 +49,7 @@ class _AppCheckboxWithTextWidgetState extends State<AppCheckboxWithTextWidget> {
           height: 30,
           child: Checkbox(
             value: widget.value,
-            activeColor: Theme.of(context).primaryColor,
+            activeColor: checkboxTheme.fillColor?.resolve({MaterialState.selected}) ?? Theme.of(context).primaryColor,
             onChanged: (newValue) {
               widget.value = !widget.value;
               widget.onChanged(widget.value);
@@ -52,12 +57,13 @@ class _AppCheckboxWithTextWidgetState extends State<AppCheckboxWithTextWidget> {
             },
           ),
         ),
-        Expanded(
-          child: InkWell(
-            onTap: widget.onTapText,
-            child: Text(widget.title),
+        if (widget.title != null)
+          Expanded(
+            child: InkWell(
+              onTap: widget.onTapText,
+              child: Text(widget.title ?? ''),
+            ),
           ),
-        ),
       ],
     );
   }

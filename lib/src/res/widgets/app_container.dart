@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+enum AppContainerImgType { asset, network, file }
+
 class AppContainer extends StatelessWidget {
   const AppContainer({
     Key? key,
-    required this.child,
+    this.child,
     this.horizontalPadding = 8,
     this.verticalPadding = 8,
     this.color = Colors.white,
     this.borderColor,
     this.borderWidth = 0,
-    this.boxShadowBlurRadius = 4,
-    this.borderRadius = 8,
+    this.borderRadius,
     this.boxShadowOffset = Offset.zero,
     this.boxShadowBlurColor,
-    this.hasShadow = true,
+    this.hasShadow = false,
     this.height,
     this.width,
     this.padding,
@@ -25,17 +26,19 @@ class AppContainer extends StatelessWidget {
     this.constraints,
     this.shape,
     this.onTap,
+    this.image,
+    this.imgType = AppContainerImgType.asset,
+    this.fit,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final double horizontalPadding;
   final double verticalPadding;
-  final double borderRadius;
+  final double? borderRadius;
   final Color color;
   final Color? borderColor;
   final double borderWidth;
   final Offset? boxShadowOffset;
-  final double boxShadowBlurRadius;
   final Color? boxShadowBlurColor;
   final bool hasShadow;
   final double? height;
@@ -48,6 +51,9 @@ class AppContainer extends StatelessWidget {
   final BoxConstraints? constraints;
   final BoxShape? shape;
   final VoidCallback? onTap;
+  final dynamic image;
+  final BoxFit? fit;
+  final AppContainerImgType? imgType;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +69,9 @@ class AppContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           shape: shape ?? BoxShape.rectangle,
-          borderRadius: shape == null ? BorderRadius.circular(borderRadius.r) : null,
+          borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!.r) : null,
           border: hasBorder ? Border.all(color: borderColor ?? Theme.of(context).primaryColor, width: borderWidth) : null,
+          image: image != null ? DecorationImage(image: _buildImage(), fit: fit) : null,
           boxShadow: hasShadow
               ? [
                   BoxShadow(
@@ -79,5 +86,18 @@ class AppContainer extends StatelessWidget {
         child: child,
       ),
     );
+  }
+
+  ImageProvider _buildImage() {
+    switch (imgType) {
+      case AppContainerImgType.asset:
+        return AssetImage(image);
+      case AppContainerImgType.network:
+        return NetworkImage(image);
+      case AppContainerImgType.file:
+        return FileImage(image);
+      default:
+        return AssetImage(image!);
+    }
   }
 }

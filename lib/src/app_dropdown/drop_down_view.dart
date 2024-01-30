@@ -156,8 +156,8 @@ class _DropdownViewState<T extends AppDropdownBaseModel<dynamic>> extends State<
           width: 90,
           height: 6,
           decoration: BoxDecoration(
-            color: Colors.grey.shade400,
-            borderRadius: BorderRadius.circular(2.5),
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(6),
           ),
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'dependency_init.config.dart';
 
-final GetIt getIt = GetIt.instance;
+final GetIt packageGetIt = GetIt.instance;
 
 @InjectableInit(
   usesNullSafety: true,
@@ -12,5 +12,5 @@ final GetIt getIt = GetIt.instance;
   asExtension: false, // default
 )
 Future<GetIt> nasserCorePackageConfigureDependencies() async {
-  return $initGetIt(getIt);
+  return $initGetIt(packageGetIt);
 }

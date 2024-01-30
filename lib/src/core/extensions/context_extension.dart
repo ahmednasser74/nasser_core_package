@@ -8,6 +8,10 @@ extension NavExtension on BuildContext {
     Navigator.push(this, MaterialPageRoute(builder: (_) => page));
   }
 
+  Future<dynamic> pushNamed(String routeName, {Object? arguments}) async {
+    Navigator.pushNamed(this, routeName, arguments: arguments);
+  }
+
   Future<dynamic> pushRoute(Route route) async {
     Navigator.of(this).push(route);
   }
@@ -16,7 +20,15 @@ extension NavExtension on BuildContext {
     Navigator.pushReplacement(this, MaterialPageRoute(builder: (_) => page));
   }
 
-  void pop(Widget page, [result]) async => Navigator.of(this).pop(result);
+  Future<dynamic> pushReplacementNamed(String routeName, {Object? arguments}) async {
+    Navigator.pushReplacementNamed(this, routeName, arguments: arguments);
+  }
+
+  void pop([result]) async => Navigator.of(this).pop(result);
+
+  void removeUntil(String routeName) {
+    Navigator.of(this).popUntil(ModalRoute.withName(routeName));
+  }
 }
 
 extension GlobalExtension on BuildContext {

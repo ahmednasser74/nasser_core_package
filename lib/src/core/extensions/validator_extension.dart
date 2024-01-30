@@ -26,9 +26,6 @@ extension PasswordValidatorExtension on String {
   }
 
   String? isConfirmPasswordMatched(String password) {
-    if (password.isEmpty) {
-      return null;
-    }
     if (isEmpty) {
       return 'thisFieldIsRequired'.translate;
     } else if (length < 8) {

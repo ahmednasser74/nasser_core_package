@@ -3,10 +3,6 @@ library nasser_core_package;
 // ------------------ Package ------------------
 export 'src/app_dropdown/index.dart';
 export 'src/core/index.dart';
-export 'src/core/mixin/index.dart';
-export 'src/core/network/index.dart';
-export 'src/core/enum/index.dart';
-export 'src/core/extensions/index.dart';
 export 'src/res/index.dart';
 export 'src/firebase/index.dart';
 
@@ -27,3 +23,5 @@ export 'package:firebase_analytics/firebase_analytics.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
+export 'package:easy_localization/easy_localization.dart';
+export 'package:permission_handler/permission_handler.dart';

@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 
 import '../enum/language.dart';
@@ -10,6 +10,10 @@ extension NavExtension on BuildContext {
 
   Future<dynamic> pushNamed(String routeName, {Object? arguments}) async {
     Navigator.pushNamed(this, routeName, arguments: arguments);
+  }
+
+  Future<dynamic> pushNamedReplacement(String routeName, {Object? arguments}) async {
+    Navigator.pushReplacementNamed(this, routeName, arguments: arguments);
   }
 
   Future<dynamic> pushRoute(Route route) async {
@@ -41,6 +45,8 @@ extension LanguageContextExtension on BuildContext {
   bool get languageIsAr => locale.toString() == Language.ar.value;
 
   bool get languageIsEn => locale.toString() == Language.en.value;
+
+  TextDirection get textDirection => languageIsAr ? TextDirection.rtl : TextDirection.ltr;
 
   void updateLanguage(Language language) {
     if (language == Language.ar) {

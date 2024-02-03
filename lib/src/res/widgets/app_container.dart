@@ -21,7 +21,6 @@ class AppContainer extends StatelessWidget {
     this.padding,
     this.margin,
     this.alignment,
-    this.hasBorder = true,
     this.shadowSpreadRadius = 0,
     this.constraints,
     this.shape,
@@ -29,12 +28,23 @@ class AppContainer extends StatelessWidget {
     this.image,
     this.imgType = AppContainerImgType.asset,
     this.fit,
+    this.gradientBegin,
+    this.gradientEnd,
+    this.gradientColors,
+    this.borderRadiusTopRight,
+    this.borderRadiusBottomRight,
+    this.borderRadiusTopLeft,
+    this.borderRadiusBottomLeft,
   }) : super(key: key);
 
   final Widget? child;
   final double horizontalPadding;
   final double verticalPadding;
   final double? borderRadius;
+  final double? borderRadiusTopRight;
+  final double? borderRadiusBottomRight;
+  final double? borderRadiusTopLeft;
+  final double? borderRadiusBottomLeft;
   final Color color;
   final Color? borderColor;
   final double borderWidth;
@@ -46,7 +56,6 @@ class AppContainer extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final Alignment? alignment;
-  final bool hasBorder;
   final double shadowSpreadRadius;
   final BoxConstraints? constraints;
   final BoxShape? shape;
@@ -54,6 +63,9 @@ class AppContainer extends StatelessWidget {
   final dynamic image;
   final BoxFit? fit;
   final AppContainerImgType? imgType;
+  final AlignmentGeometry? gradientBegin;
+  final AlignmentGeometry? gradientEnd;
+  final List<Color>? gradientColors;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +81,16 @@ class AppContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           shape: shape ?? BoxShape.rectangle,
-          borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!.r) : null,
-          border: hasBorder ? Border.all(color: borderColor ?? Theme.of(context).primaryColor, width: borderWidth) : null,
+          borderRadius: _buildBorderRadius,
+          border: _border(context),
           image: image != null ? DecorationImage(image: _buildImage(), fit: fit) : null,
+          gradient: gradientColors == null
+              ? null
+              : LinearGradient(
+                  begin: gradientBegin ?? Alignment.topCenter,
+                  end: gradientEnd ?? Alignment.bottomCenter,
+                  colors: gradientColors ?? [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
+                ),
           boxShadow: hasShadow
               ? [
                   BoxShadow(
@@ -99,5 +118,28 @@ class AppContainer extends StatelessWidget {
       default:
         return AssetImage(image!);
     }
+  }
+
+  // borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!.r) : null,
+  BorderRadiusGeometry? get _buildBorderRadius {
+    if (borderRadius != null) {
+      return BorderRadius.circular(borderRadius!.r);
+    }
+    if (borderRadiusTopRight != null || borderRadiusBottomRight != null || borderRadiusTopLeft != null || borderRadiusBottomLeft != null) {
+      return BorderRadius.only(
+        topRight: borderRadiusTopRight != null ? Radius.circular(borderRadiusTopRight!.r) : Radius.zero,
+        bottomRight: borderRadiusBottomRight != null ? Radius.circular(borderRadiusBottomRight!.r) : Radius.zero,
+        topLeft: borderRadiusTopLeft != null ? Radius.circular(borderRadiusTopLeft!.r) : Radius.zero,
+        bottomLeft: borderRadiusBottomLeft != null ? Radius.circular(borderRadiusBottomLeft!.r) : Radius.zero,
+      );
+    }
+    return null;
+  }
+
+  BoxBorder? _border(BuildContext context) {
+    if (borderColor != null) {
+      return Border.all(color: borderColor ?? Theme.of(context).primaryColor, width: borderWidth);
+    }
+    return null;
   }
 }

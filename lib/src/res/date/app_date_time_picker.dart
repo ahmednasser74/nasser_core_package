@@ -72,13 +72,35 @@ class AppDateTimePicker {
                   borderRadius: 12.r,
                   height: 6.h,
                   width: .2.sw,
-                  child: const SizedBox.shrink(),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      24.widthBox,
+                      AppText(
+                        'cancel'.translate,
+                        size: 18.sp,
+                        color: Colors.grey,
+                        onTap: context.pop,
+                      ),
+                      const Spacer(),
+                      AppText(
+                        'ok'.translate,
+                        size: 18.sp,
+                        color: Colors.blue,
+                        onTap: context.pop,
+                      ),
+                      24.widthBox,
+                    ],
+                  ),
                 ),
                 24.heightBox,
                 Expanded(
                   child: CupertinoDatePicker(
                     mode: mode,
-                    initialDateTime: initialDate ?? DateTime.now(),
+                    initialDateTime: initialDate ?? lastDate ?? DateTime.now(),
                     minimumDate: firstDate ?? DateTime.now(),
                     maximumDate: lastDate ?? DateTime(2100),
                     onDateTimeChanged: onChange,

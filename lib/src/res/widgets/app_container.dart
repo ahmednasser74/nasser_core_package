@@ -11,7 +11,7 @@ class AppContainer extends StatelessWidget {
     this.verticalPadding = 8,
     this.color = Colors.white,
     this.borderColor,
-    this.borderWidth = 0,
+    this.borderWidth = 1,
     this.borderRadius,
     this.boxShadowOffset = Offset.zero,
     this.boxShadowBlurColor,

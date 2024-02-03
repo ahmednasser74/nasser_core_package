@@ -60,6 +60,17 @@ mixin FileProperties {
     return imageExtensions.contains(extension);
   }
 
+  Future<List<String>?> pickedMultipleImages() async {
+    final pickedFiles = await ImagePicker().pickMultiImage(
+      imageQuality: 50,
+    );
+    var imagesPath = pickedFiles?.map((image) => image.path).toList();
+    if (imagesPath == null) {
+      return null;
+    }
+    return imagesPath;
+  }
+
   Future<({File file, String path})?> pickedImage({required ImageSource source}) async {
     try {
       PermissionStatus imagePermission = source == ImageSource.camera ? await Permission.camera.request() : await Permission.storage.request();

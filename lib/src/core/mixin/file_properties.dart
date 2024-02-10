@@ -73,7 +73,13 @@ mixin FileProperties {
 
   Future<({File file, String path})?> pickedImage({required ImageSource source}) async {
     try {
-      PermissionStatus imagePermission = source == ImageSource.camera ? await Permission.camera.request() : await Permission.storage.request();
+      PermissionStatus imagePermission;
+      if (source == ImageSource.camera) {
+        imagePermission = await Permission.camera.request();
+      } else {
+        imagePermission = await Permission.storage.request();
+      }
+
       if (imagePermission.isDenied || (Platform.isAndroid && imagePermission.isPermanentlyDenied)) {
         throw Exception('pleaseAllowCameraPermission'.translate);
       }

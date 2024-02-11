@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'index.dart';
+
 class AppTextFieldWidget extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? inputType;
@@ -77,45 +79,48 @@ class _AppTextFieldWidgetState extends State<AppTextFieldWidget> {
   Widget build(BuildContext context) {
     final InputDecorationTheme inputDecorationTheme = Theme.of(context).inputDecorationTheme;
     return StatefulBuilder(builder: (context, setState) {
-      return Container(
+      return AppContainer(
         height: widget.height,
         margin: widget.padding,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(120.r)),
-        child: TextFormField(
-          style: TextStyle(color: widget.fontColor, fontSize: widget.fontSize, height: 1.4),
-          obscureText: passwordVisibility,
-          // onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-          focusNode: widget.focusNode,
-          controller: widget.controller,
-          validator: widget.validator,
-          keyboardType: widget.inputType,
-          readOnly: widget.readOnly,
-          onChanged: widget.onChanged,
-          onTap: widget.onTap,
-          autofocus: widget.autoFocus,
-          textInputAction: TextInputAction.next,
-          maxLines: widget.maxLines,
-          autovalidateMode: widget.autovalidateMode,
-          inputFormatters: [
-            if (widget.acceptArabicCharOnly) FilteringTextInputFormatter.allow(RegExp('^[\u0621-\u064A\u0660-\u0669 ]+\$')),
-            if (widget.acceptNumbersOnly) FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-            labelStyle: TextStyle(fontSize: widget.labelFontSize),
-            hintText: widget.hint,
-            border: inputDecorationTheme.border,
-            focusedBorder: inputDecorationTheme.focusedBorder,
-            enabledBorder: inputDecorationTheme.enabledBorder,
-            errorBorder: inputDecorationTheme.errorBorder,
-            disabledBorder: inputDecorationTheme.disabledBorder,
-            filled: widget.filled == null ? inputDecorationTheme.filled : widget.filled,
-            fillColor: widget.fillColor ?? inputDecorationTheme.fillColor,
-            contentPadding: inputDecorationTheme.contentPadding,
-            errorMaxLines: 2,
-            focusColor: inputDecorationTheme.focusColor,
-            prefixIcon: widget.prefixIcon,
-            suffixIcon: suffixIcon(setState),
+        onTap: widget.onTap,
+        color: Colors.transparent,
+        child: IgnorePointer(
+          ignoring: widget.readOnly,
+          child: TextFormField(
+            style: TextStyle(color: widget.fontColor, fontSize: widget.fontSize, height: 1.4),
+            obscureText: passwordVisibility,
+            // onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            focusNode: widget.focusNode,
+            controller: widget.controller,
+            validator: widget.validator,
+            keyboardType: widget.inputType,
+            // readOnly: widget.readOnly,
+            onChanged: widget.onChanged,
+            autofocus: widget.autoFocus,
+            textInputAction: TextInputAction.next,
+            maxLines: widget.maxLines,
+            autovalidateMode: widget.autovalidateMode,
+            inputFormatters: [
+              if (widget.acceptArabicCharOnly) FilteringTextInputFormatter.allow(RegExp('^[\u0621-\u064A\u0660-\u0669 ]+\$')),
+              if (widget.acceptNumbersOnly) FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration: InputDecoration(
+              labelText: widget.labelText,
+              labelStyle: inputDecorationTheme.labelStyle ?? TextStyle(fontSize: widget.labelFontSize),
+              hintText: widget.hint,
+              border: inputDecorationTheme.border,
+              focusedBorder: inputDecorationTheme.focusedBorder,
+              enabledBorder: inputDecorationTheme.enabledBorder,
+              errorBorder: inputDecorationTheme.errorBorder,
+              disabledBorder: inputDecorationTheme.disabledBorder,
+              filled: widget.filled == null ? inputDecorationTheme.filled : widget.filled,
+              fillColor: widget.fillColor ?? inputDecorationTheme.fillColor,
+              contentPadding: inputDecorationTheme.contentPadding,
+              errorMaxLines: 2,
+              focusColor: inputDecorationTheme.focusColor,
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: suffixIcon(setState),
+            ),
           ),
         ),
       );
@@ -126,7 +131,7 @@ class _AppTextFieldWidgetState extends State<AppTextFieldWidget> {
     if (widget.secureText) {
       return IconButton(
         icon: Icon(
-          passwordVisibility ? Icons.visibility_off : Icons.visibility,
+          passwordVisibility ? Icons.visibility_off_outlined : Icons.visibility_outlined,
           color: widget.secureIconColor ?? Theme.of(context).primaryColor,
         ),
         onPressed: () => setState(() => passwordVisibility = !passwordVisibility),

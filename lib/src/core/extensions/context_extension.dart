@@ -40,7 +40,7 @@ extension GlobalExtension on BuildContext {
 }
 
 extension LanguageContextExtension on BuildContext {
-  Language get getLanguage => locale.toString() == Language.ar.value ? Language.ar : Language.en;
+  Language get getLanguage => Language.values.firstWhere((element) => element.value == locale.toString());
 
   bool get languageIsAr => locale.toString() == Language.ar.value;
 

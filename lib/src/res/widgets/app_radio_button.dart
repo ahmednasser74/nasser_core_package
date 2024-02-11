@@ -7,6 +7,9 @@ class AppRadioButton<T> extends StatelessWidget {
   final T value;
   final Function(T) onChanged;
   final double? labelFontSize;
+  final Color? labelColor;
+  final Color? selectedColor;
+  final Color? unselectedColor;
 
   const AppRadioButton({
     super.key,
@@ -15,6 +18,9 @@ class AppRadioButton<T> extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.labelFontSize,
+    this.labelColor,
+    this.selectedColor,
+    this.unselectedColor,
   });
 
   @override
@@ -45,6 +51,10 @@ class AppRadioButton<T> extends StatelessWidget {
                 groupValue: groupValue,
                 value: value,
                 overlayColor: radioTheme.fillColor,
+                fillColor: _fillColor(radioTheme),
+                activeColor: Colors.green,
+                focusColor: Colors.purple,
+                hoverColor: Colors.blue,
                 onChanged: (T? newValue) => onChanged(newValue as T),
               ),
             ),
@@ -53,10 +63,23 @@ class AppRadioButton<T> extends StatelessWidget {
               label,
               maxLines: 1,
               size: labelFontSize,
+              color: labelColor,
             ),
           ],
         ),
       ),
     );
+  }
+
+  dynamic _fillColor(RadioThemeData radioTheme) {
+    if (selectedColor != null && unselectedColor != null) {
+      return MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return selectedColor!; // Color when the checkbox is selected
+        }
+        return unselectedColor!; // Color when the checkbox is not selected
+      });
+    }
+    return radioTheme.fillColor;
   }
 }

@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 
 class AppText extends StatelessWidget {
   final String text;
-  final Color? color;
   final double? size;
   final double? height;
   final FontWeight? weight;
   final int? maxLines;
   final String? family;
-  final Color? backgroundColor;
+  final Color? backgroundColor, decorationColor, color;
   final TextAlign? align;
   final FontStyle? fontStyle;
   final TextDecoration? decoration;
@@ -21,6 +20,7 @@ class AppText extends StatelessWidget {
   final TextBaseline? textBaseline;
   final void Function()? onTap;
   final EdgeInsetsGeometry? padding;
+  final TextDecorationStyle? decorationStyle;
 
   const AppText(
     this.text, {
@@ -42,6 +42,8 @@ class AppText extends StatelessWidget {
     this.textBaseline,
     this.onTap,
     this.padding,
+    this.decorationStyle,
+    this.decorationColor,
   }) : super(key: key);
 
   @override
@@ -61,6 +63,8 @@ class AppText extends StatelessWidget {
             fontSize: size,
             fontWeight: weight,
             decoration: decoration,
+            decorationStyle: decorationStyle,
+            decorationColor: decorationColor ?? color,
             backgroundColor: backgroundColor,
             height: height,
             wordSpacing: wordSpacing,

@@ -60,7 +60,9 @@ class AppDateTimePicker {
       builder: (_) {
         return SafeArea(
           child: AppContainer(
-            margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+            marginLeft: 12.w,
+            marginRight: 12.w,
+            marginBottom: 12.h,
             color: Colors.white,
             borderRadius: 12,
             height: 0.3.sh,

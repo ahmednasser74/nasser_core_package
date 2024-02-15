@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nasser_core_package/nasser_ui_package.dart';
 
 enum AppContainerImgType { asset, network, file }
 
@@ -7,19 +8,16 @@ class AppContainer extends StatelessWidget {
   const AppContainer({
     Key? key,
     this.child,
-    this.horizontalPadding = 8,
-    this.verticalPadding = 8,
-    this.color = Colors.white,
+    this.paddingHorizontal,
+    this.paddingVertical,
+    this.color,
     this.borderColor,
     this.borderWidth = 1,
     this.borderRadius,
-    this.boxShadowOffset = Offset.zero,
-    this.boxShadowBlurColor,
-    this.hasShadow = false,
+    this.shadowOffset = Offset.zero,
+    this.shadowBlurColor,
     this.height,
     this.width,
-    this.padding,
-    this.margin,
     this.alignment,
     this.shadowSpreadRadius = 0,
     this.constraints,
@@ -35,47 +33,47 @@ class AppContainer extends StatelessWidget {
     this.borderRadiusBottomRight,
     this.borderRadiusTopLeft,
     this.borderRadiusBottomLeft,
+    this.paddingAll,
+    this.marginAll,
+    this.marginTop,
+    this.marginBottom,
+    this.marginLeft,
+    this.marginRight,
+    this.marginHorizontal,
+    this.marginVertical,
+    this.paddingTop,
+    this.paddingBottom,
+    this.paddingLeft,
+    this.paddingRight,
   }) : super(key: key);
 
   final Widget? child;
-  final double horizontalPadding;
-  final double verticalPadding;
-  final double? borderRadius;
-  final double? borderRadiusTopRight;
-  final double? borderRadiusBottomRight;
-  final double? borderRadiusTopLeft;
-  final double? borderRadiusBottomLeft;
-  final Color color;
-  final Color? borderColor;
-  final double borderWidth;
-  final Offset? boxShadowOffset;
-  final Color? boxShadowBlurColor;
-  final bool hasShadow;
-  final double? height;
-  final double? width;
-  final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
+  final Color? color, borderColor, shadowBlurColor;
+  final VoidCallback? onTap;
+  final double borderWidth, shadowSpreadRadius;
+  final Offset? shadowOffset;
   final Alignment? alignment;
-  final double shadowSpreadRadius;
   final BoxConstraints? constraints;
   final BoxShape? shape;
-  final VoidCallback? onTap;
   final dynamic image;
   final BoxFit? fit;
   final AppContainerImgType? imgType;
-  final AlignmentGeometry? gradientBegin;
-  final AlignmentGeometry? gradientEnd;
+  final AlignmentGeometry? gradientBegin, gradientEnd;
   final List<Color>? gradientColors;
+  final double? height, width;
+  final double? paddingAll, paddingTop, paddingBottom, paddingLeft, paddingRight, paddingHorizontal, paddingVertical;
+  final double? marginAll, marginTop, marginBottom, marginLeft, marginRight, marginVertical, marginHorizontal;
+  final double? borderRadius, borderRadiusTopRight, borderRadiusBottomRight, borderRadiusTopLeft, borderRadiusBottomLeft;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height?.h,
-        width: width?.w,
-        padding: padding,
-        margin: margin,
+        height: height,
+        width: width,
+        padding: _padding,
+        margin: _margin,
         alignment: alignment,
         constraints: constraints,
         decoration: BoxDecoration(
@@ -84,23 +82,8 @@ class AppContainer extends StatelessWidget {
           borderRadius: _buildBorderRadius,
           border: _border(context),
           image: image != null ? DecorationImage(image: _buildImage(), fit: fit) : null,
-          gradient: gradientColors == null
-              ? null
-              : LinearGradient(
-                  begin: gradientBegin ?? Alignment.topCenter,
-                  end: gradientEnd ?? Alignment.bottomCenter,
-                  colors: gradientColors ?? [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-                ),
-          boxShadow: hasShadow
-              ? [
-                  BoxShadow(
-                    color: boxShadowBlurColor?.withOpacity(.7) ?? Theme.of(context).colorScheme.secondary,
-                    offset: boxShadowOffset ?? const Offset(0, 8),
-                    blurRadius: 8,
-                    spreadRadius: shadowSpreadRadius,
-                  )
-                ]
-              : null,
+          gradient: _gradient(context),
+          boxShadow: _boxShadow(context),
         ),
         child: child,
       ),
@@ -136,9 +119,70 @@ class AppContainer extends StatelessWidget {
     return null;
   }
 
+  EdgeInsetsGeometry get _margin {
+    if (marginAll != null) {
+      return EdgeInsets.all(marginAll!);
+    }
+    if (marginTop != null || marginBottom != null || marginLeft != null || marginRight != null) {
+      return EdgeInsetsDirectional.only(
+        top: marginTop ?? 0,
+        bottom: marginBottom ?? 0,
+        start: marginLeft ?? 0,
+        end: marginRight ?? 0,
+      );
+    }
+    if (marginVertical != null || marginHorizontal != null) {
+      return EdgeInsets.symmetric(vertical: marginVertical ?? 0, horizontal: marginHorizontal ?? 0);
+    }
+    return EdgeInsets.zero;
+  }
+
+  EdgeInsetsGeometry get _padding {
+    if (paddingAll != null) {
+      return EdgeInsets.all(paddingAll!);
+    }
+    if (paddingTop != null || paddingBottom != null || paddingLeft != null || paddingRight != null) {
+      return EdgeInsetsDirectional.only(
+        top: paddingTop ?? 0,
+        bottom: paddingBottom ?? 0,
+        start: paddingLeft ?? 0,
+        end: paddingRight ?? 0,
+      );
+    }
+    if (paddingVertical != null || paddingHorizontal != null) {
+      return EdgeInsets.symmetric(vertical: paddingVertical ?? 0, horizontal: paddingHorizontal ?? 0);
+    }
+    return EdgeInsets.zero;
+  }
+
   BoxBorder? _border(BuildContext context) {
     if (borderColor != null) {
       return Border.all(color: borderColor ?? Theme.of(context).primaryColor, width: borderWidth);
+    }
+    return null;
+  }
+
+  Gradient? _gradient(BuildContext context) {
+    if (gradientColors != null) {
+      return LinearGradient(
+        begin: gradientBegin ?? Alignment.topCenter,
+        end: gradientEnd ?? Alignment.bottomCenter,
+        colors: [...gradientColors!],
+      );
+    }
+    return null;
+  }
+
+  List<BoxShadow>? _boxShadow(BuildContext context) {
+    if (shadowBlurColor != null || shadowOffset != null) {
+      return [
+        BoxShadow(
+          color: shadowBlurColor?.withOpacity(.7) ?? Colors.transparent,
+          offset: shadowOffset ?? const Offset(0, 0),
+          blurRadius: 8,
+          spreadRadius: shadowSpreadRadius,
+        )
+      ];
     }
     return null;
   }

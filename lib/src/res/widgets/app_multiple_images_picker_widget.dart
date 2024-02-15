@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:nasser_core_package/nasser_core_package.dart';
@@ -21,6 +22,7 @@ class AppMultipleImagePickerWidget extends StatefulWidget {
 
 class _AppMultipleImagePickerWidgetState extends State<AppMultipleImagePickerWidget> with FileProperties {
   List<String> images = [];
+  bool get hasReachedMax => images.length != widget.maxImages;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class _AppMultipleImagePickerWidgetState extends State<AppMultipleImagePickerWid
           mainAxisSize: MainAxisSize.min,
           children: [
             if (images.length == widget.maxImages) _racedMaxSelectedImagesWarning(context),
-            12.widthBox,
+            if (!hasReachedMax) 12.widthBox,
             Expanded(child: _addPhotosWidget(context)),
           ],
         ),
@@ -47,19 +49,24 @@ class _AppMultipleImagePickerWidgetState extends State<AppMultipleImagePickerWid
   Widget _addPhotosWidget(BuildContext context) {
     return AppButton(
       onTap: () async {
-        if (images.length != widget.maxImages) {
+        if (hasReachedMax) {
           final List<String>? pickedImages = await pickedMultipleImages();
           if (pickedImages != null) {
             images.addAll(pickedImages);
-            if (images.length > widget.maxImages) {
-              images.length = widget.maxImages;
+            if (images.length > widget.maxImages) images.length = widget.maxImages;
+            for (var i = 0; i < images.length; i++) {
+              final isFileSizeLowerThan3Mega = await isFileSizeLowerThan(filepath: images[i], maxMegaSize: 2);
+              if (!isFileSizeLowerThan3Mega) {
+                final compressedFiles = await compressFile(file: File(images[i]));
+                images[i] = compressedFiles.path;
+              }
             }
             widget.onSelectImage(images);
             setState(() {});
           }
         }
       },
-      backgroundColor: images.length != widget.maxImages ? Theme.of(context).primaryColor : Colors.grey,
+      backgroundColor: hasReachedMax ? Theme.of(context).primaryColor : Colors.grey,
       paddingHorizontal: 8,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -79,14 +86,15 @@ class _AppMultipleImagePickerWidgetState extends State<AppMultipleImagePickerWid
           height: 60.h,
           width: 60.w,
           borderRadius: 6.r,
-          margin: EdgeInsetsDirectional.only(end: 12.w, top: 12.h),
+          marginLeft: 12.w,
+          marginTop: 12.h,
           imgType: AppContainerImgType.file,
           image: File(e),
           borderColor: Colors.white,
           fit: BoxFit.fill,
         ),
         PositionedDirectional(
-          end: 6,
+          end: 1,
           child: AppContainer(
             onTap: () {
               setState(() => images.remove(e));
@@ -105,8 +113,9 @@ class _AppMultipleImagePickerWidgetState extends State<AppMultipleImagePickerWid
 
   Widget _racedMaxSelectedImagesWarning(BuildContext context) {
     return AppContainer(
-      margin: EdgeInsets.symmetric(vertical: 6.h),
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+      marginVertical: 6.h,
+      paddingHorizontal: 8.w,
+      paddingVertical: 3.h,
       borderRadius: 4.r,
       color: Theme.of(context).primaryColor,
       child: Row(

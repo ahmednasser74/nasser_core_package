@@ -14,12 +14,14 @@ import 'package:injectable/injectable.dart';
 class AppNotificationService {
   static final AppNotificationService _instance = AppNotificationService._();
 
+  AppNotificationService();
   AppNotificationService._();
 
   static AppNotificationService get instance => _instance;
   late FirebaseMessaging messaging;
 
   Future<void> init() async {
+    print('object');
     messaging = FirebaseMessaging.instance;
     await messaging.requestPermission();
     _initAndFireLocalNotification();

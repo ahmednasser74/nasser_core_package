@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:nasser_core_package/nasser_core_package.dart';
 import 'dependency_init.config.dart';
 
 final GetIt packageGetIt = GetIt.instance;
@@ -12,5 +12,6 @@ final GetIt packageGetIt = GetIt.instance;
   asExtension: false, // default
 )
 Future<GetIt> nasserCorePackageConfigureDependencies() async {
+  // final LoggerEnv loggerEnv = packageGetIt<LoggerEnv>();
   return $initGetIt(packageGetIt);
 }

@@ -12,14 +12,15 @@ class AppRichText extends StatelessWidget {
     this.valueColor,
     this.titleFontFamily,
     this.valueDecoration,
-    this.weight,
+    this.titleWeight,
+    this.valueWeight,
   }) : super(key: key);
   final String title, value;
   final double? fontSize, titleFontSize, valueFontSize;
   final Color? titleColor, valueColor;
   final String? titleFontFamily;
   final TextDecoration? valueDecoration;
-  final FontWeight? weight;
+  final FontWeight? titleWeight, valueWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +29,10 @@ class AppRichText extends StatelessWidget {
       text: TextSpan(
         text: title,
         style: TextStyle(
-          color: titleColor ?? Theme.of(context).primaryColor,
+          color: titleColor,
           fontFamily: theme.textTheme.bodyMedium?.fontFamily ?? titleFontFamily,
           fontSize: titleFontSize ?? fontSize,
-          fontWeight: weight,
+          fontWeight: titleWeight,
         ),
         children: [
           TextSpan(
@@ -42,7 +43,7 @@ class AppRichText extends StatelessWidget {
               fontFamily: theme.textTheme.bodyMedium?.fontFamily ?? titleFontFamily,
               overflow: TextOverflow.ellipsis,
               decoration: valueDecoration,
-              fontWeight: weight,
+              fontWeight: valueWeight,
             ),
           ),
         ],

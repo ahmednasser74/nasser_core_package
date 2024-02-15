@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart' hide ResponseType;
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:nasser_core_package/nasser_core_package.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'error/index.dart';
@@ -21,8 +22,11 @@ abstract class Network {
 
 @LazySingleton(as: Network)
 class NetworkImpl implements Network {
-  NetworkImpl() {
-    _dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, maxWidth: 90));
+  final AppLogger appLogger;
+
+  NetworkImpl(this.appLogger) {
+    final interceptor = packageGetIt<AppLogger>();
+    _dio.interceptors.add(interceptor);
   }
   final int timeOutInMilliseconds = 10000;
   final StatusChecker _statusChecker = StatusChecker();

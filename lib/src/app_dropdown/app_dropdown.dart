@@ -175,8 +175,9 @@ class _AppDropdownState<T extends AppDropdownBaseModel<T>> extends State<AppDrop
       backgroundColor: Colors.transparent,
       builder: (context) {
         return AppContainer(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          margin: EdgeInsets.all(18.sp),
+          paddingBottom: MediaQuery.of(context).viewInsets.bottom,
+          color: Colors.white,
+          marginAll: 18.sp,
           borderRadius: 12.r,
           child: BlocProvider<AppDropdownBloc>.value(
             value: widget.appDropdownBloc ?? packageGetIt<AppDropdownBloc>(),
